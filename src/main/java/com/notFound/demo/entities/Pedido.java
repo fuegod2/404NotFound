@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -14,26 +15,24 @@ import java.util.Set;
 @Table(name = "pedido")
 public class Pedido {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pedido", nullable = false)
     private Integer id;
 
-    @Column(name = "estado", nullable = false, length = 2)
+    @Column(name = "estado", nullable = false, length = 25)
     private String estado;
 
-    @Column(name = "total_pagar", nullable = false)
-    private Integer totalPagar;
+    @Column(name = "f_pedido", nullable = false)
+    private LocalDate fPedido;
 
-    @Column(name = "f_entrega")
-    private LocalDate fEntrega;
+    @Column(name = "valor_total", precision = 10, scale = 2)
+    private BigDecimal valorTotal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;
 
-    @Column(name = "f_pedido")
-    private LocalDate fPedido;
-
     @OneToMany(mappedBy = "idPedido")
-    private Set<CamisaEstampaPedido> camisaEstampaPedidos = new LinkedHashSet<>();
+    private Set<DetallePedido> detallePedidos = new LinkedHashSet<>();
 
 }

@@ -5,24 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "cliente")
-public class Cliente {
+@Table(name = "administrador")
+public class Administrador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cliente", nullable = false)
+    @Column(name = "id_administrador", nullable = false)
     private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
-
-    @Column(name = "apellido", nullable = false, length = 50)
-    private String apellido;
 
     @Column(name = "usuario", nullable = false, length = 50)
     private String usuario;
@@ -38,14 +33,5 @@ public class Cliente {
 
     @Column(name = "numero_id", nullable = false, precision = 10)
     private BigDecimal numeroId;
-
-    @OneToMany(mappedBy = "idCliente")
-    private Set<Direccion> direccions = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idCliente")
-    private Set<MedioDePago> medioDePagos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idCliente")
-    private Set<Pedido> pedidos = new LinkedHashSet<>();
 
 }
