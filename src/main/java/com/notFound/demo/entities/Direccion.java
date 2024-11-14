@@ -10,27 +10,28 @@ import lombok.Setter;
 @Table(name = "direccion")
 public class Direccion {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "direccion_id_gen")
+    @SequenceGenerator(name = "direccion_id_gen", sequenceName = "direccion_id_direccion_seq", allocationSize = 1)
+    @Column(name = "id_direccion", nullable = false)
     private Integer id;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id", nullable = false)
-    private Cliente cliente;
+    @Column(name = "codigo_postal", nullable = false)
+    private Integer codigoPostal;
 
-    @Column(name = "codigo_postal", nullable = false, length = 50)
-    private String codigoPostal;
+    @Column(name = "numero", nullable = false, length = Integer.MAX_VALUE)
+    private String numero;
 
-    @Column(name = "calle", nullable = false, length = 50)
+    @Column(name = "calle", nullable = false, length = 10)
     private String calle;
 
-    @Column(name = "numero", nullable = false, length = 50)
-    private String numero;
+    @Column(name = "carrera", nullable = false, length = 10)
+    private String carrera;
 
     @Column(name = "ciudad", nullable = false, length = 50)
     private String ciudad;
 
-    @Column(name = "carrera", nullable = false, length = 50)
-    private String carrera;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente")
+    private Cliente idCliente;
 
 }
