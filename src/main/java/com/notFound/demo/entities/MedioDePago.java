@@ -33,4 +33,51 @@ public class MedioDePago {
     @JoinColumn(name = "id_artista")
     private Artista idArtista;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNumeroTarjeta() {
+        return numeroTarjeta;
+    }
+
+    public void setNumeroTarjeta(String numeroTarjeta) {
+        this.numeroTarjeta = numeroTarjeta;
+    }
+
+    public String getTipoTarjeta() {
+        return tipoTarjeta;
+    }
+
+    public void setTipoTarjeta(String tipoTarjeta) {
+        this.tipoTarjeta = tipoTarjeta;
+    }
+
+    public LocalDate getfVencimiento() {
+        return fVencimiento;
+    }
+
+    public void setfVencimiento(LocalDate fVencimiento) {
+        this.fVencimiento = fVencimiento;
+    }
+
+    public Cliente getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Cliente idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public Artista getIdArtista() {
+        return idArtista;
+    }
+
+    public void setIdArtista(Artista idArtista) {
+        this.idArtista = idArtista;
+    }
 }

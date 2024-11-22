@@ -48,4 +48,91 @@ public class Cliente {
     @OneToMany(mappedBy = "idCliente")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getTipoId() {
+        return tipoId;
+    }
+
+    public void setTipoId(String tipoId) {
+        this.tipoId = tipoId;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public BigDecimal getNumeroId() {
+        return numeroId;
+    }
+
+    public void setNumeroId(BigDecimal numeroId) {
+        this.numeroId = numeroId;
+    }
+
+    public Set<Direccion> getDireccions() {
+        return direccions;
+    }
+
+    public void setDireccions(Set<Direccion> direccions) {
+        this.direccions = direccions;
+    }
+
+    public Set<MedioDePago> getMedioDePagos() {
+        return medioDePagos;
+    }
+
+    public void setMedioDePagos(Set<MedioDePago> medioDePagos) {
+        this.medioDePagos = medioDePagos;
+    }
+
+    public Set<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(Set<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
 }
