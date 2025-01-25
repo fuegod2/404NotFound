@@ -14,7 +14,6 @@ import java.util.Set;
 @Table(name = "cliente")
 public class Cliente {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente", nullable = false)
     private Integer id;
 

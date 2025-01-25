@@ -58,6 +58,9 @@ public class ClienteController {
             clienteObj.setCorreo(correo);
             clienteObj.setNumeroId(numero_id);
 
+
+            clienteRepository.save(clienteObj);
+
             MedioDePago medioDePagoObj = new MedioDePago();
             medioDePagoObj.setId(((int)medioDePagoRepository.count())+1);
             medioDePagoObj.setNumeroTarjeta(numero_tarjeta);
@@ -65,7 +68,6 @@ public class ClienteController {
             medioDePagoObj.setfVencimiento(f_vencimiento);
             medioDePagoObj.setIdCliente(clienteObj);
 
-            clienteRepository.save(clienteObj);
             medioDePagoRepository.save(medioDePagoObj);
             return true;
         } catch (Exception e) {

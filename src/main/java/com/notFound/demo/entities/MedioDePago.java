@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Table(name = "medio_de_pago")
 public class MedioDePago {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_medio_de_pago", nullable = false)
     private Integer id;
 
