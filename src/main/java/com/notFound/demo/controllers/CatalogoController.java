@@ -1,7 +1,9 @@
 package com.notFound.demo.controllers;
 
+import com.notFound.demo.entities.Catalogo;
 import com.notFound.demo.entities.Tema;
-import com.notFound.demo.repositories.EstampaRepository;
+import com.notFound.demo.repositories.CatalogoRepository;
+//import com.notFound.demo.repositories.EstampaRepository;
 import com.notFound.demo.repositories.TemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,10 @@ public class CatalogoController {
 
     @Autowired
     private TemaRepository temaRepository;
+    @Autowired
+    private CatalogoRepository catalogoRepository;
+
+
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/")
@@ -26,4 +32,19 @@ public class CatalogoController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(temaDTOs);
     }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/catalogo")
+    public ResponseEntity<List<Catalogo>> catalogo() {
+        List<Catalogo> catalogo = catalogoRepository.findAll();
+        /*
+        List<TemaDTO> temaDTOs = temas.stream()
+                .map(TemaDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(temaDTOs);
+        */
+        return ResponseEntity.ok(catalogo);
+    }
+
+
 }
