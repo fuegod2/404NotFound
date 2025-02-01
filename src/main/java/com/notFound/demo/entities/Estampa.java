@@ -14,7 +14,6 @@ import java.util.Set;
 @Table(name = "estampa")
 public class Estampa {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estampa", nullable = false)
     private Integer id;
 
@@ -50,4 +49,91 @@ public class Estampa {
     @OneToMany(mappedBy = "idEstampa")
     private Set<Imagen> imagens = new LinkedHashSet<>();
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Boolean getVisibilidad() {
+        return visibilidad;
+    }
+
+    public void setVisibilidad(Boolean visibilidad) {
+        this.visibilidad = visibilidad;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public BigDecimal getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(BigDecimal calificacion) {
+        this.calificacion = calificacion;
+    }
+
+    public Tema getIdTema() {
+        return idTema;
+    }
+
+    public void setIdTema(Tema idTema) {
+        this.idTema = idTema;
+    }
+
+    public Artista getIdArtista() {
+        return idArtista;
+    }
+
+    public void setIdArtista(Artista idArtista) {
+        this.idArtista = idArtista;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
+    public Set<CamisaEstampa> getCamisaEstampas() {
+        return camisaEstampas;
+    }
+
+    public void setCamisaEstampas(Set<CamisaEstampa> camisaEstampas) {
+        this.camisaEstampas = camisaEstampas;
+    }
+
+    public Set<Imagen> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(Set<Imagen> imagens) {
+        this.imagens = imagens;
+    }
 }

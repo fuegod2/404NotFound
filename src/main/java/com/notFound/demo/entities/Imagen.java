@@ -10,7 +10,6 @@ import lombok.Setter;
 @Table(name = "imagen")
 public class Imagen {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_imagen", nullable = false)
     private Integer id;
 
@@ -21,4 +20,27 @@ public class Imagen {
     @JoinColumn(name = "id_estampa")
     private Estampa idEstampa;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEnlace() {
+        return enlace;
+    }
+
+    public void setEnlace(String enlace) {
+        this.enlace = enlace;
+    }
+
+    public Estampa getIdEstampa() {
+        return idEstampa;
+    }
+
+    public void setIdEstampa(Estampa idEstampa) {
+        this.idEstampa = idEstampa;
+    }
 }
