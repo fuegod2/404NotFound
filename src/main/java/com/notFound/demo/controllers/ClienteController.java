@@ -5,6 +5,8 @@ import com.notFound.demo.entities.MedioDePago;
 import com.notFound.demo.repositories.ClienteRepository;
 import com.notFound.demo.repositories.MedioDePagoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,15 +25,19 @@ public class ClienteController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
-    private boolean login(@RequestParam String usuario, @RequestParam String contrasena) {
-
+    public ResponseEntity<Integer> login(
+            @RequestParam String usuario,
+            @RequestParam String contrasena
+    ) {
         Optional<Cliente> cliente = clienteRepository.findByUsuario(usuario);
 
-        if (cliente.isPresent()) {
+        if (cliente.isPresent() && contrasena.equals(cliente.get().getContrasena())) {
+            System.out.println(cliente.get().getId());
+            return ResponseEntity.ok(cliente.get().getId()); // Retorna ID con status 200
 
-            return contrasena.equals(cliente.get().getContrasena());
         }
-        return false;
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Credenciales inválidas
     }
 
     @GetMapping("/register")

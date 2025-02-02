@@ -37,12 +37,7 @@ public class CatalogoController {
     @GetMapping("/catalogo")
     public ResponseEntity<List<Catalogo>> catalogo() {
         List<Catalogo> catalogo = catalogoRepository.findAll();
-        /*
-        List<TemaDTO> temaDTOs = temas.stream()
-                .map(TemaDTO::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(temaDTOs);
-        */
+
         return ResponseEntity.ok(catalogo);
     }
 

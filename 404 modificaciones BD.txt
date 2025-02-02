@@ -1,7 +1,8 @@
 ALTER TABLE medio_de_pago ADD COLUMN saldo NUMERIC(11,2)
 
-CREATE VIEW catalogo AS 
-SELECT 
+
+CREATE VIEW catalogo AS
+SELECT
 	e.id_estampa,
 	e.nombre as nombre_estampa,
 	e.descripcion,
@@ -12,13 +13,18 @@ SELECT
 	ar.nombre as nombre_artista,
 	ar.apellido,
 	ar.id_artista,
-	im.enlace
+	im.enlace,
+	e.precio
 FROM estampa e
-join tema te ON e.id_tema = te.id_tema 
-join artista ar ON e.id_artista = ar.id_artista 
+join tema te ON e.id_tema = te.id_tema
+join artista ar ON e.id_artista = ar.id_artista
 join imagen im ON im.id_estampa = e.id_estampa
 where e.visibilidad = true;
 
+INSERT INTO tema (id_tema,nombre) VALUES (999,'Todos')
+INSERT INTO tema (id_tema,nombre) VALUES (1,'Halloween')
+INSERT INTO tema (id_tema,nombre) VALUES (2,'Disney')
+INSERT INTO tema (id_tema,nombre) VALUES (3,'Navidad')
 
 INSERT INTO estampa (id_estampa, nombre, precio, id_tema, id_artista, visibilidad, stock, calificacion, descripcion)
 VALUES

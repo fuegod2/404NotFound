@@ -53,4 +53,7 @@ public class Catalogo {
     @Column(name = "enlace", length = 2000)
     private String imagen;
 
+    @Column(name = "precio", precision = 10, scale = 2)
+    private BigDecimal precio;
+
 }
