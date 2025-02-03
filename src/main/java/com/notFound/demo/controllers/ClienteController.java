@@ -23,6 +23,8 @@ public class ClienteController {
     @Autowired
     ClienteRepository clienteRepository;
 
+    private Cliente clienteObj;
+
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
     public ResponseEntity<Integer> login(
@@ -32,6 +34,8 @@ public class ClienteController {
         Optional<Cliente> cliente = clienteRepository.findByUsuario(usuario);
 
         if (cliente.isPresent() && contrasena.equals(cliente.get().getContrasena())) {
+
+            clienteObj = cliente.get();
             System.out.println(cliente.get().getId());
             return ResponseEntity.ok(cliente.get().getId()); // Retorna ID con status 200
 
@@ -41,7 +45,7 @@ public class ClienteController {
     }
 
     @GetMapping("/register")
-    private boolean register(@RequestParam String nombre,
+    public boolean register(@RequestParam String nombre,
                              @RequestParam String apellido,
                              @RequestParam String usuario,
                              @RequestParam String contrasena,

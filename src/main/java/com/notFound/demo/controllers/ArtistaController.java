@@ -3,6 +3,8 @@ package com.notFound.demo.controllers;
 import com.notFound.demo.entities.*;
 import com.notFound.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -34,20 +36,23 @@ public class ArtistaController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
-    private boolean login(@RequestParam String usuario, @RequestParam String contrasena) {
+    public ResponseEntity<Integer> login(@RequestParam String usuario, @RequestParam String contrasena) {
 
         Optional<Artista> artista = artistaRepository.findByUsuario(usuario);
 
         if (artista.isPresent() && artista.get().getContrasena().equals(contrasena)) {
 
             artistaObj = artista.get();
-            return true;
+            System.out.println(artista.get().getId());
+            return ResponseEntity.ok(artista.get().getId()); // Retorna ID con status 200
+
         }
-        return false;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Credenciales inválidas
+
     }
 
     @GetMapping("/register")
-    private boolean register(@RequestParam String nombre,
+    public boolean register(@RequestParam String nombre,
                              @RequestParam String apellido,
                              @RequestParam String usuario,
                              @RequestParam String contrasena,
