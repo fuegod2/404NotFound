@@ -43,10 +43,10 @@ public class Cliente {
 
     @OneToMany(mappedBy = "idCliente")
     private Set<MedioDePago> medioDePagos = new LinkedHashSet<>();
-
+/*
     @OneToMany(mappedBy = "idCliente")
     private Set<Pedido> pedidos = new LinkedHashSet<>();
-
+*/
     public Integer getId() {
         return id;
     }
@@ -126,7 +126,7 @@ public class Cliente {
     public void setMedioDePagos(Set<MedioDePago> medioDePagos) {
         this.medioDePagos = medioDePagos;
     }
-
+/*
     public Set<Pedido> getPedidos() {
         return pedidos;
     }
@@ -134,4 +134,5 @@ public class Cliente {
     public void setPedidos(Set<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
+    */
 }

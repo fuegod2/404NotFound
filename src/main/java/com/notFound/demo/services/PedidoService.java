@@ -15,7 +15,7 @@ public class PedidoService {
 @Autowired
     private PedidoRepository pedidoRepository;
     @Autowired
-    private ClienteRepository clienteRepository;
+    private MedioDePagoRepository medioDePagoRepository;
     @Autowired
     private EstampaRepository estampaRepository;
 
@@ -38,7 +38,8 @@ public class PedidoService {
         pedido.setValorTotal(valorTotal);
         return pedidoRepository.save(pedido);
     }
-    public Pedido createPedido(List<CarritoDTO> cartItems, Cliente cliente) {
+    @Transactional
+    public boolean createPedido(List<CarritoDTO> cartItems, Cliente cliente) {
         // Create the order
         Pedido pedido = new Pedido();
         pedido.setId(((int)pedidoRepository.count())+1);
@@ -87,17 +88,48 @@ public class PedidoService {
 
             // Save the DetallePedido
             detallePedidoRepository.save(detallePedido);
-
+            pedido.agregarDetallePedido(detallePedido);
             // Update the total order value
             totalPedido = totalPedido.add(valorItemTotal);
         }
-
+        pedido.setValorTotal(totalPedido.subtract(BigDecimal.ONE));
+        pedidoRepository.save(pedido);
         // Update the order total
-        pedido.setValorTotal(totalPedido);
 
-        pedido.setEstado("ACEPTADO");
+        if (procesarPago(pedido)){
+            pedido.setEstado("ACEPTADO");
+            reducirStockDeEstampas(pedido);
 
-        return pedidoRepository.save(pedido);
+            return true;
+        }
+        else{
+            throw new RuntimeException("Algo salió mal :(");
+        }
+
+
+
+    }
+
+    @Transactional
+    public void reducirStockDeEstampas(Pedido pedido) {
+        // Recorrer los detalles del pedido
+        for (DetallePedido detalle : pedido.getDetallePedidos()) {
+            // Obtener la CamisaEstampa asociada al detalle
+            CamisaEstampa camisaEstampa = detalle.getIdCamisaEstampa();
+
+            // Obtener la Estampa asociada a la CamisaEstampa
+            Estampa estampa = camisaEstampa.getIdEstampa();
+
+            // Reducir el stock de la estampa según la cantidad ordenada
+            int nuevoStock = estampa.getStock() - detalle.getCantidad();
+            if (nuevoStock < 0) {
+                throw new RuntimeException("Stock insuficiente para la estampa con ID: " + estampa.getId());
+            }
+
+            // Actualizar el stock de la estampa
+            estampa.setStock(nuevoStock);
+            estampaRepository.save(estampa);
+        }
     }
 
     private BigDecimal CalcularSubtotal(CamisaEstampa camisaEstampa) {
@@ -107,8 +139,46 @@ public class PedidoService {
 
 
     @Transactional
-    public boolean procesarPago(){
+    public boolean procesarPago(Pedido pedido){
+        try {
 
-        return false;
+
+            Cliente cliente = pedido.getIdCliente();
+
+            // Obtener el medio de pago del cliente
+            MedioDePago medioDePagoObj = cliente.getMedioDePagos().stream()
+                    .findFirst() // Obtener el primer medio de pago (o el que corresponda)
+                    .orElse(null);
+
+            // Verificar si el cliente tiene un medio de pago válido
+            if (medioDePagoObj == null) {
+                System.out.println("El cliente no tiene un medio de pago registrado.");
+                return false;
+            }
+
+            // Obtener el saldo del medio de pago
+            BigDecimal saldo = medioDePagoObj.getSaldo();
+
+            // Obtener el costo total del pedido
+            BigDecimal costoPedido = pedido.getValorTotal();
+
+            // Verificar si el saldo es suficiente
+            if (saldo.compareTo(costoPedido) >= 0) {
+                // Descontar el costo del pedido del saldo
+                BigDecimal nuevoSaldo = saldo.subtract(costoPedido);
+                medioDePagoObj.setSaldo(nuevoSaldo);
+
+                // Guardar el medio de pago actualizado (si es necesario)
+                medioDePagoRepository.save(medioDePagoObj);
+
+                System.out.println("Pago procesado exitosamente. Nuevo saldo: " + nuevoSaldo);
+                return true;
+            } else {
+                System.out.println("Saldo insuficiente. Saldo actual: " + saldo + ", Costo del pedido: " + costoPedido);
+                return false;
+            }
+        } catch (Exception e){
+            return false;
+        }
     }
 }

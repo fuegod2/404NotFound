@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -23,6 +24,9 @@ public class MedioDePago {
 
     @Column(name = "f_vencimiento", nullable = false)
     private LocalDate fVencimiento;
+
+    @Column(name = "saldo", nullable = false, length = 11, precision = 2)
+    private BigDecimal saldo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")

@@ -49,11 +49,11 @@ public class LoginTest {
                 .thenReturn(Optional.of(clienteMock));
 
         // Ejecutar el método
-     //   ResponseEntity<Optional<Cliente>> respuesta = clienteController.login("pepe01", "pepepassword");
+        ResponseEntity<Integer> respuesta = clienteController.login("pepe01", "pepepassword");
 
         // Verificar resultados
-        //assertEquals(HttpStatus.OK, respuesta.getStatusCode());
-        //assertEquals(clienteMock, respuesta.getBody());
+        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
+        assertEquals(1, respuesta.getBody());
         verify(clienteRepository, times(1)).findByUsuario("pepe01"); // Asegurar que se llamó al repositorio
     }
 
@@ -92,7 +92,7 @@ public class LoginTest {
         assertEquals(HttpStatus.UNAUTHORIZED, respuesta.getStatusCode());
         verify(artistaRepository).findByUsuario("pepe01");
     }
-/*
+
     @Test
     void loginContrasenaIncorrectaArtista_Retorna401() {
         Cliente clienteMock = new Cliente();
@@ -102,7 +102,7 @@ public class LoginTest {
         when(clienteRepository.findByUsuario("pepe01"))
                 .thenReturn(Optional.of(clienteMock));
 
-        ResponseEntity<Optional<Cliente>> respuesta = clienteController.login("pepe01", "contrasenaErronea");
+        ResponseEntity<Integer> respuesta = clienteController.login("pepe01", "contrasenaErronea");
 
         assertEquals(HttpStatus.UNAUTHORIZED, respuesta.getStatusCode());
         verify(clienteRepository).findByUsuario("pepe01");
@@ -113,7 +113,7 @@ public class LoginTest {
         when(clienteRepository.findByUsuario("pepe01"))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<Optional<Cliente>> respuesta = clienteController.login("pepe01", "pepepassword");
+        ResponseEntity<Integer> respuesta = clienteController.login("pepe01", "pepepassword");
 
         assertEquals(HttpStatus.UNAUTHORIZED, respuesta.getStatusCode());
         verify(clienteRepository).findByUsuario("pepe01");
@@ -129,7 +129,7 @@ public class LoginTest {
         assertEquals(HttpStatus.UNAUTHORIZED, respuesta.getStatusCode());
         verify(artistaRepository).findByUsuario("pepe01");
     }
- */
+
 }
 
 

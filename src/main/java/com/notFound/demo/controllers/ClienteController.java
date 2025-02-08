@@ -3,7 +3,6 @@ package com.notFound.demo.controllers;
 import com.notFound.demo.DTOs.CarritoDTO;
 import com.notFound.demo.entities.Cliente;
 import com.notFound.demo.entities.MedioDePago;
-import com.notFound.demo.entities.Pedido;
 import com.notFound.demo.repositories.ClienteRepository;
 import com.notFound.demo.repositories.MedioDePagoRepository;
 import com.notFound.demo.services.PedidoService;
@@ -31,9 +30,7 @@ public class ClienteController {
     PedidoService pedidoService;
 
     private Cliente clienteObj;
-    public Cliente getCliente (){
-        return clienteObj;
-    }
+
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
     public ResponseEntity<Integer> login(
@@ -97,7 +94,7 @@ public class ClienteController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping ("/comprarPedido")
-    public Pedido comprarPedido(@RequestBody List<CarritoDTO> cartItems) {
+    public boolean comprarPedido(@RequestBody List<CarritoDTO> cartItems) {
 
         return pedidoService.createPedido(cartItems, this.clienteObj);
 

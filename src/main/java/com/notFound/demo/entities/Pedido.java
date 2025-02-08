@@ -35,4 +35,8 @@ public class Pedido {
     @OneToMany(mappedBy = "idPedido")
     private Set<DetallePedido> detallePedidos = new LinkedHashSet<>();
 
+    public void agregarDetallePedido(DetallePedido detallePedido) {
+        detallePedidos.add(detallePedido); // Agregar a la colección
+
+    }
 }
