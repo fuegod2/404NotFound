@@ -6,7 +6,6 @@ import com.notFound.demo.entities.MedioDePago;
 import com.notFound.demo.entities.Pedido;
 import com.notFound.demo.repositories.ClienteRepository;
 import com.notFound.demo.repositories.MedioDePagoRepository;
-import com.notFound.demo.repositories.PedidoRepository;
 import com.notFound.demo.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -96,8 +95,8 @@ public class ClienteController {
 
     }
 
-
-    @GetMapping("/comprarPedido")
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping ("/comprarPedido")
     public Pedido comprarPedido(@RequestBody List<CarritoDTO> cartItems) {
 
         return pedidoService.createPedido(cartItems, this.clienteObj);

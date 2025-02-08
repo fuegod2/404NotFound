@@ -24,7 +24,7 @@ public class CamisaEstampaService {
     @Transactional
     public CamisaEstampa createCamisaEstampa(
             String talla, String color, String material, String tipo,
-             BigDecimal precioCamisaEstampa,Integer idEstampa, BigInteger posicionX, BigInteger posicionY) {
+             BigDecimal precioCamisaEstampa,Integer idEstampa, Integer posicionX, Integer posicionY) {
 
         // Find the shirt
         Camisa camisa = camisaService.findCamisa(talla, color, material, tipo);
@@ -43,8 +43,8 @@ public class CamisaEstampaService {
         camisaEstampaObj.setIdCamisa(camisa);
         camisaEstampaObj.setIdEstampa(estampa);
         camisaEstampaObj.setPrecioCamisaEstampa(precioCamisaEstampa);
-        camisaEstampaObj.setPosicionX((posicionX)); // Set position X
-        camisaEstampaObj.setPosicionY((posicionY)); // Set position Y
+        camisaEstampaObj.setPosicionX((BigInteger.valueOf(posicionX))); // Set position X
+        camisaEstampaObj.setPosicionY((BigInteger.valueOf(posicionX))); // Set position Y
 
         return camisaEstampaRepository.save(camisaEstampaObj);
     }
