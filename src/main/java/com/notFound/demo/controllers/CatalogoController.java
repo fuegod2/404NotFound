@@ -1,5 +1,6 @@
 package com.notFound.demo.controllers;
 
+import com.notFound.demo.DTOs.TemaDTO;
 import com.notFound.demo.entities.Catalogo;
 import com.notFound.demo.entities.Tema;
 import com.notFound.demo.repositories.CatalogoRepository;

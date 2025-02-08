@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -17,6 +18,12 @@ public class CamisaEstampa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_camisa_estampa", nullable = false)
     private Integer id;
+
+    @Column(name = "posicion_x", nullable = false, precision = 3)
+    private BigInteger posicionX;
+
+    @Column(name = "posicion_y", nullable = false, precision = 3)
+    private BigInteger posicionY;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_camisa", nullable = false)
@@ -31,5 +38,7 @@ public class CamisaEstampa {
 
     @OneToMany(mappedBy = "idCamisaEstampa")
     private Set<DetallePedido> detallePedidos = new LinkedHashSet<>();
+
+
 
 }

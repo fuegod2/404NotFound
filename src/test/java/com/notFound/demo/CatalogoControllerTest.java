@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.notFound.demo.controllers.CatalogoController;
-import com.notFound.demo.controllers.TemaDTO;
+import com.notFound.demo.DTOs.TemaDTO;
 import com.notFound.demo.entities.Catalogo;
 import com.notFound.demo.entities.Tema;
 import com.notFound.demo.repositories.CatalogoRepository;

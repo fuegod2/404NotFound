@@ -1,9 +1,13 @@
 package com.notFound.demo.controllers;
 
+import com.notFound.demo.DTOs.CarritoDTO;
 import com.notFound.demo.entities.Cliente;
 import com.notFound.demo.entities.MedioDePago;
+import com.notFound.demo.entities.Pedido;
 import com.notFound.demo.repositories.ClienteRepository;
 import com.notFound.demo.repositories.MedioDePagoRepository;
+import com.notFound.demo.repositories.PedidoRepository;
+import com.notFound.demo.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,8 +28,13 @@ public class ClienteController {
     @Autowired
     ClienteRepository clienteRepository;
 
-    private Cliente clienteObj;
+    @Autowired
+    PedidoService pedidoService;
 
+    private Cliente clienteObj;
+    public Cliente getCliente (){
+        return clienteObj;
+    }
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
     public ResponseEntity<Integer> login(
@@ -83,6 +93,14 @@ public class ClienteController {
         } catch (Exception e) {
             return false;
         }
+
+    }
+
+
+    @GetMapping("/comprarPedido")
+    public Pedido comprarPedido(@RequestBody List<CarritoDTO> cartItems) {
+
+        return pedidoService.createPedido(cartItems, this.clienteObj);
 
     }
 
