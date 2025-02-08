@@ -1,4 +1,4 @@
-package com.notFound.demo.controllers;
+package com.notFound.demo.DTOs;
 
 import com.notFound.demo.entities.Tema;
 import lombok.Value;

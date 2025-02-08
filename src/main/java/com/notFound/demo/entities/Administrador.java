@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Table(name = "administrador")
 public class Administrador {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id_administrador", nullable = false)
     private Integer id;
 

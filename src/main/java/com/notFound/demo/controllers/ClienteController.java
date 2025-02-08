@@ -24,7 +24,9 @@ public class ClienteController {
     ClienteRepository clienteRepository;
 
     private Cliente clienteObj;
-
+    public Cliente getCliente (){
+        return clienteObj;
+    }
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
     public ResponseEntity<Integer> login(
