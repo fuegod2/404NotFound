@@ -16,17 +16,16 @@ public class Direccion {
     @Column(name = "codigo_postal", nullable = false)
     private Integer codigoPostal;
 
-    @Column(name = "numero", nullable = false, length = Integer.MAX_VALUE)
-    private String numero;
 
-    @Column(name = "calle", nullable = false, length = 10)
-    private String calle;
+    @Column(name = "direccion", nullable = false, length = 200)
+    private String direccion;
 
-    @Column(name = "carrera", nullable = false, length = 10)
-    private String carrera;
+    @Column(name = "detelles_direccion", nullable = false, length = 200)
+    private String detellesDireccion;
 
-    @Column(name = "ciudad", nullable = false, length = 50)
-    private String ciudad;
+    @Column(name = "nombre_direccion", nullable = false, length = 200)
+    private String nombreDireccion;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")

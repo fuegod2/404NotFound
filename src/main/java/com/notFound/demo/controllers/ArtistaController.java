@@ -5,6 +5,7 @@ import com.notFound.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -31,6 +32,10 @@ public class ArtistaController {
 
     @Autowired
     private TemaRepository temaRepository;
+
+    @Autowired
+    DireccionRepository direccionRepository;
+
 
     private Artista artistaObj;
 
@@ -87,6 +92,37 @@ public class ArtistaController {
 
             medioDePagoRepository.save(medioDePagoObj);
             return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    @Transactional
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/registerMedio")
+    public boolean registerMedio(
+
+            @RequestParam String numero_tarjeta,
+            @RequestParam String tipo_tarjeta,
+            @RequestParam LocalDate f_vencimiento,
+            @RequestParam Integer codigoPostal,
+            @RequestParam String nombre,
+            @RequestParam String direccion,
+            @RequestParam String detalles
+    ){
+        try {
+            MedioDePago medioDePagoObj = new MedioDePago();
+            medioDePagoObj.setId(((int)medioDePagoRepository.count())+1);
+            medioDePagoObj.setNumeroTarjeta(numero_tarjeta);
+            medioDePagoObj.setTipoTarjeta(tipo_tarjeta);
+            medioDePagoObj.setfVencimiento(f_vencimiento);
+            medioDePagoObj.setIdArtista(artistaObj);
+            medioDePagoRepository.save(medioDePagoObj);
+
+            return true;
+
+
         } catch (Exception e) {
             return false;
         }

@@ -1,7 +1,10 @@
 package com.notFound.demo.controllers;
 
 import com.notFound.demo.DTOs.CarritoDTO;
+import com.notFound.demo.DTOs.MedioDePagoDto;
 import com.notFound.demo.entities.Cliente;
+import com.notFound.demo.entities.Direccion;
+import com.notFound.demo.repositories.DireccionRepository;
 import com.notFound.demo.entities.MedioDePago;
 import com.notFound.demo.repositories.ClienteRepository;
 import com.notFound.demo.repositories.MedioDePagoRepository;
@@ -9,12 +12,14 @@ import com.notFound.demo.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clientes")
@@ -30,6 +35,8 @@ public class ClienteController {
     PedidoService pedidoService;
 
     private Cliente clienteObj;
+    @Autowired
+    private DireccionRepository direccionRepository;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/login")
@@ -49,7 +56,7 @@ public class ClienteController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Credenciales inválidas
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/register")
     public boolean register(@RequestParam String nombre,
                              @RequestParam String apellido,
@@ -76,16 +83,47 @@ public class ClienteController {
 
 
             clienteRepository.save(clienteObj);
+            this.clienteObj = clienteObj;
 
+            MedioDePago medioDePagoObj = new MedioDePago();
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+    @Transactional
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/registerMedioDireccion")
+    public boolean registerMedio(
+
+                                 @RequestParam String numero_tarjeta,
+                                 @RequestParam String tipo_tarjeta,
+                                 @RequestParam LocalDate f_vencimiento,
+                                 @RequestParam Integer codigoPostal,
+                                 @RequestParam String nombre,
+                                 @RequestParam String direccion,
+                                 @RequestParam String detalles
+                                  ){
+        try {
             MedioDePago medioDePagoObj = new MedioDePago();
             medioDePagoObj.setId(((int)medioDePagoRepository.count())+1);
             medioDePagoObj.setNumeroTarjeta(numero_tarjeta);
             medioDePagoObj.setTipoTarjeta(tipo_tarjeta);
             medioDePagoObj.setfVencimiento(f_vencimiento);
             medioDePagoObj.setIdCliente(clienteObj);
-
             medioDePagoRepository.save(medioDePagoObj);
+            Direccion direccionObj = new Direccion();
+            direccionObj.setIdCliente(clienteObj);
+            direccionObj.setDireccion(direccion);
+            direccionObj.setDetellesDireccion(detalles);
+            direccionObj.setNombreDireccion(nombre);
+            direccionObj.setCodigoPostal(codigoPostal);
+            direccionRepository.save(direccionObj);
             return true;
+
+
         } catch (Exception e) {
             return false;
         }
@@ -99,6 +137,14 @@ public class ClienteController {
         return pedidoService.createPedido(cartItems, this.clienteObj);
 
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping ("/mediosPago")
+    public  ResponseEntity<List<MedioDePagoDto>> mediosDePago(Cliente cliente) {
+        List<MedioDePago> medios = medioDePagoRepository.findByidCliente(cliente);
+        List<MedioDePagoDto> medioDePagoDtos = medios.stream()
+                .map(MedioDePagoDto::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(medioDePagoDtos);
+    }
 
 }
