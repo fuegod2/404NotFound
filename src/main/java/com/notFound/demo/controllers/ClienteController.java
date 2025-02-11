@@ -124,7 +124,7 @@ public class ClienteController {
             // Convierte YearMonth a LocalDate (asignando el primer día del mes)
             medioDePagoObj.setfVencimiento(yearMonth.atDay(1));
             medioDePagoObj.setIdCliente(clienteObj);
-            medioDePagoObj.setSaldo(BigDecimal.valueOf(150000.00));
+            medioDePagoObj.setSaldo(BigDecimal.valueOf(500000.00));
             medioDePagoRepository.save(medioDePagoObj);
             Direccion direccionObj = new Direccion();
             direccionObj.setIdCliente(clienteObj);
