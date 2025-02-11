@@ -4,6 +4,7 @@ import com.notFound.demo.entities.MedioDePago;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * DTO for {@link com.notFound.demo.entities.MedioDePago}
@@ -13,6 +14,7 @@ public class MedioDePagoDto implements Serializable {
     Integer id;
     String numeroTarjeta;
     String tipoTarjeta;
+   LocalDate fechaVencimiento;
     public MedioDePagoDto(MedioDePago medioDePago) {
         id = medioDePago.getId();
 
@@ -22,5 +24,6 @@ public class MedioDePagoDto implements Serializable {
         }
         numeroTarjeta = sb.toString();
         tipoTarjeta = medioDePago.getTipoTarjeta();
+        fechaVencimiento = medioDePago.getfVencimiento();
     }
 }

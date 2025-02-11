@@ -1,6 +1,7 @@
 package com.notFound.demo.services;
 
 import com.notFound.demo.DTOs.CarritoDTO;
+import com.notFound.demo.DTOs.CompraRequestDTO;
 import com.notFound.demo.entities.*;
 import com.notFound.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -39,8 +41,9 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
     @Transactional
-    public boolean createPedido(List<CarritoDTO> cartItems, Cliente cliente) {
+    public String createPedido(CompraRequestDTO compra, Cliente cliente) {
         // Create the order
+       List<CarritoDTO> cartItems = compra.getCart();
         Pedido pedido = new Pedido();
         pedido.setId(((int)pedidoRepository.count())+1);
         pedido.setFPedido(LocalDate.now());
@@ -96,14 +99,14 @@ public class PedidoService {
         pedidoRepository.save(pedido);
         // Update the order total
 
-        if (procesarPago(pedido)){
+        if (procesarPago(pedido,compra.getPago()).contains("Pago procesado exitosamente")){
             pedido.setEstado("ACEPTADO");
             reducirStockDeEstampas(pedido);
 
-            return true;
+            return "Pago procesado exitosamente";
         }
         else{
-            throw new RuntimeException("Algo salió mal :(");
+            return "Algo salió mal :(";
         }
 
 
@@ -139,25 +142,21 @@ public class PedidoService {
 
 
     @Transactional
-    public boolean procesarPago(Pedido pedido){
+    public String procesarPago(Pedido pedido,Integer medio){
         try {
-
-
             Cliente cliente = pedido.getIdCliente();
 
             // Obtener el medio de pago del cliente
-            MedioDePago medioDePagoObj = cliente.getMedioDePagos().stream()
-                    .findFirst() // Obtener el primer medio de pago (o el que corresponda)
-                    .orElse(null);
+            Optional<MedioDePago> medioDePagoObj = medioDePagoRepository.findById(medio);
 
             // Verificar si el cliente tiene un medio de pago válido
-            if (medioDePagoObj == null) {
+            if (medioDePagoObj.isEmpty()) {
                 System.out.println("El cliente no tiene un medio de pago registrado.");
-                return false;
+                return "El cliente no tiene un medio de pago registrado.";
             }
 
             // Obtener el saldo del medio de pago
-            BigDecimal saldo = medioDePagoObj.getSaldo();
+            BigDecimal saldo = medioDePagoObj.get().getSaldo();
 
             // Obtener el costo total del pedido
             BigDecimal costoPedido = pedido.getValorTotal();
@@ -166,19 +165,19 @@ public class PedidoService {
             if (saldo.compareTo(costoPedido) >= 0) {
                 // Descontar el costo del pedido del saldo
                 BigDecimal nuevoSaldo = saldo.subtract(costoPedido);
-                medioDePagoObj.setSaldo(nuevoSaldo);
+                medioDePagoObj.get().setSaldo(nuevoSaldo);
 
                 // Guardar el medio de pago actualizado (si es necesario)
-                medioDePagoRepository.save(medioDePagoObj);
+                medioDePagoRepository.save(medioDePagoObj.orElse(null));
 
-                System.out.println("Pago procesado exitosamente. Nuevo saldo: " + nuevoSaldo);
-                return true;
+                System.out.println("Pago procesado exitosamente");
+                return "Pago procesado exitosamente. Nuevo saldo:";
             } else {
                 System.out.println("Saldo insuficiente. Saldo actual: " + saldo + ", Costo del pedido: " + costoPedido);
-                return false;
+                return "Saldo insuficiente." ;
             }
         } catch (Exception e){
-            return false;
+            return "Ha ocurrido un error"+e.getMessage();
         }
     }
 }

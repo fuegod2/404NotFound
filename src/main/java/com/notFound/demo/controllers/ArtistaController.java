@@ -105,11 +105,7 @@ public class ArtistaController {
 
             @RequestParam String numero_tarjeta,
             @RequestParam String tipo_tarjeta,
-            @RequestParam LocalDate f_vencimiento,
-            @RequestParam Integer codigoPostal,
-            @RequestParam String nombre,
-            @RequestParam String direccion,
-            @RequestParam String detalles
+            @RequestParam LocalDate f_vencimiento
     ){
         try {
             MedioDePago medioDePagoObj = new MedioDePago();
@@ -129,7 +125,7 @@ public class ArtistaController {
 
     }
 
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/uploadEstampa")
     private boolean uploadEstampa(@RequestParam String nombreEstampa,
                                   @RequestParam String descripcionEstampa,
@@ -173,6 +169,7 @@ public class ArtistaController {
 
 
     }
+
 }
 
 

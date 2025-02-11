@@ -1,7 +1,6 @@
 package com.notFound.demo.controllers;
 
-import com.notFound.demo.DTOs.CarritoDTO;
-import com.notFound.demo.DTOs.MedioDePagoDto;
+import com.notFound.demo.DTOs.*;
 import com.notFound.demo.entities.Cliente;
 import com.notFound.demo.entities.Direccion;
 import com.notFound.demo.repositories.DireccionRepository;
@@ -93,6 +92,9 @@ public class ClienteController {
         }
 
     }
+
+
+
     @Transactional
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/registerMedioDireccion")
@@ -130,21 +132,65 @@ public class ClienteController {
 
     }
 
+    @Transactional
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping ("/comprarPedido")
-    public boolean comprarPedido(@RequestBody List<CarritoDTO> cartItems) {
+    @GetMapping("/registerMedio")
+    public boolean registerMedioPago(
 
-        return pedidoService.createPedido(cartItems, this.clienteObj);
+            @RequestParam String numero_tarjeta,
+            @RequestParam String tipo_tarjeta,
+            @RequestParam LocalDate f_vencimiento
+    ){
+        try {
+            MedioDePago medioDePagoObj = new MedioDePago();
+            medioDePagoObj.setId(((int)medioDePagoRepository.count())+1);
+            medioDePagoObj.setNumeroTarjeta(numero_tarjeta);
+            medioDePagoObj.setTipoTarjeta(tipo_tarjeta);
+            medioDePagoObj.setfVencimiento(f_vencimiento);
+            medioDePagoObj.setIdCliente(clienteObj);
+            medioDePagoRepository.save(medioDePagoObj);
+            return true;
+
+
+        } catch (Exception e) {
+            return false;
+        }
 
     }
+
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping ("/mediosPago")
-    public  ResponseEntity<List<MedioDePagoDto>> mediosDePago(Cliente cliente) {
-        List<MedioDePago> medios = medioDePagoRepository.findByidCliente(cliente);
+    @PostMapping ("/comprarPedido")
+    public String comprarPedido(@RequestBody CompraRequestDTO compra) {
+
+        return pedidoService.createPedido(compra, this.clienteObj);
+
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/mediosPago")
+    public  ResponseEntity<List<MedioDePagoDto>> mediosDePago() {
+        List<MedioDePago> medios = medioDePagoRepository.findByidCliente(this.clienteObj);
         List<MedioDePagoDto> medioDePagoDtos = medios.stream()
                 .map(MedioDePagoDto::new)
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok(medioDePagoDtos);
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping ("/direcciones")
+    public  ResponseEntity<DireccionDto>Direcciones() {
+        List<Direccion> direcciones = direccionRepository.findByidCliente(this.clienteObj);
+
+
+        DireccionDto direccionDto = new DireccionDto(direcciones.get(0));
+        return ResponseEntity.ok(direccionDto);
+    }
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping ("/infoCliente")
+    public  ResponseEntity<ClienteDTO> infoCliente() {
+        ClienteDTO clientelogged = new ClienteDTO(this.clienteObj);
+        return  ResponseEntity.ok(clientelogged);
     }
 
 }
