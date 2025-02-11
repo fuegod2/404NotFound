@@ -63,34 +63,23 @@ public class ArtistaController {
                              @RequestParam String contrasena,
                              @RequestParam String tipo_id,
                              @RequestParam String correo,
-                             @RequestParam BigDecimal numero_id,
-                             @RequestParam String numero_tarjeta,
-                             @RequestParam String tipo_tarjeta,
-                             @RequestParam LocalDate f_vencimiento){
+                             @RequestParam String numero_id){
 
 
         try {
             Artista artistaObj = new Artista();
-            artistaObj.setId(((int)artistaRepository.count())+1);
+            artistaObj.setId(((int)artistaRepository.count())+10001);
             artistaObj.setNombre(nombre);
             artistaObj.setApellido(apellido);
             artistaObj.setUsuario(usuario);
             artistaObj.setContrasena(contrasena);
             artistaObj.setTipoId(tipo_id);
             artistaObj.setCorreo(correo);
-            artistaObj.setNumeroId(numero_id);
+            BigDecimal numeroId = new BigDecimal(numero_id);
+            artistaObj.setNumeroId(numeroId);
 
 
             artistaRepository.save(artistaObj);
-
-            MedioDePago medioDePagoObj = new MedioDePago();
-            medioDePagoObj.setId(((int)medioDePagoRepository.count())+1);
-            medioDePagoObj.setNumeroTarjeta(numero_tarjeta);
-            medioDePagoObj.setTipoTarjeta(tipo_tarjeta);
-            medioDePagoObj.setfVencimiento(f_vencimiento);
-            medioDePagoObj.setIdArtista(artistaObj);
-
-            medioDePagoRepository.save(medioDePagoObj);
             return true;
         } catch (Exception e) {
             return false;
@@ -137,10 +126,18 @@ public class ArtistaController {
                                   @RequestParam String nombreTema){
 
         try {
-
             Tema temaObj = new Tema();
-            temaObj.setId(((int)temaRepository.count())+1);
-            temaObj.setNombre(nombreTema);
+            Optional<Tema> temaObj1 = temaRepository.findByNombre( nombreTema);
+            if (temaObj1.isPresent()) {
+                temaObj.setNombre(temaObj1.get().getNombre());
+                temaObj.setId(temaObj1.get().getId());
+            }
+            else{
+
+                temaObj.setId(((int)temaRepository.count())+1);
+                temaObj.setNombre(nombreTema);
+            }
+
 
             Estampa estampaObj = new Estampa();
             estampaObj.setId(((int)estampaRepository.count())+1);
